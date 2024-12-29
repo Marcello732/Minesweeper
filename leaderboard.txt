@@ -1,5 +1,9 @@
-Ola 25
-Marcel 4
-Kacper 16
-Aga 21
-Zosia 10Test 2
+Ola 25 Easy
+Marcel 4 Easy
+Kacper 16 Easy
+Aga 21 Easy
+Zosia 10 Easy
+Test 2 Easy
+Test3 0 Medium
+Test4 34 Medium
+Test6 27 Easy

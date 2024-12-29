@@ -3,7 +3,7 @@
 #include <string.h>
 #include "minesweeper.h"
 
-void safeScore(char *name, int score)
+void saveScore(char *name, int score, char *level)
 {
     FILE *file = fopen("leaderboard.txt", "a");
     if (file == NULL)
@@ -11,7 +11,7 @@ void safeScore(char *name, int score)
         printf("Error opening file!\n");
         exit(1);
     }
-    fprintf(file, "%s %d\n", name, score);
+    fprintf(file, "%s %d %s\n", name, score, level);
     fclose(file);
 }
 
@@ -26,10 +26,12 @@ void getTopFiveScores()
 
     char name[100];
     int score;
+    char level[10];
     int scores[5] = {0};
     char names[5][100];
+    char levels[5][10];
 
-    while (fscanf(file, "%s %d", name, &score) != EOF)
+    while (fscanf(file, "%s %d %s", name, &score, level) != EOF)
     {
         for (int i = 0; i < 5; i++)
         {
@@ -39,9 +41,11 @@ void getTopFiveScores()
                 {
                     scores[j] = scores[j - 1];
                     strcpy(names[j], names[j - 1]);
+                    strcpy(levels[j], levels[j - 1]);
                 }
                 scores[i] = score;
                 strcpy(names[i], name);
+                strcpy(levels[i], level);
                 break;
             }
         }
@@ -50,7 +54,7 @@ void getTopFiveScores()
     printf("\nTop 5 Scores:\n");
     for (int i = 0; i < 5; i++)
     {
-        printf("%d. %s: %d\n", i + 1, names[i], scores[i]);
+        printf("%d. %s: %d %s\n", i + 1, names[i], scores[i], levels[i]);
     }
 
     fclose(file);
@@ -89,6 +93,8 @@ void playGame(Board *board, char *name)
     int uncoveredCells = 0;
     int multiplier = (board->rows == EASY_ROWS) ? 1 : (board->rows == MEDIUM_ROWS) ? 2
                                                                                    : 3;
+    char *level = (board->rows == EASY_ROWS) ? "Easy" : (board->rows == MEDIUM_ROWS) ? "Medium"
+                                                                                     : "Hard";
 
     while (1)
     {
@@ -138,7 +144,7 @@ void playGame(Board *board, char *name)
                 printf("Game Over! You hit a mine at (%d, %d).\n", x + 1, y + 1);
                 printBoard(board, 1);
                 printf("Final Score: %d\n", uncoveredCells * multiplier);
-                safeScore(name, uncoveredCells * multiplier);
+                saveScore(name, uncoveredCells * multiplier, level);
                 getTopFiveScores();
                 break;
             }
@@ -166,7 +172,7 @@ void playGame(Board *board, char *name)
                 printf("Congratulations! You've cleared the board.\n");
                 printBoard(board, 1);
                 printf("Final Score: %d\n", uncoveredCells * multiplier);
-                safeScore(name, uncoveredCells * multiplier);
+                saveScore(name, uncoveredCells * multiplier, level);
                 getTopFiveScores();
                 break;
             }
