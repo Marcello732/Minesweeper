@@ -1,8 +1,62 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "minesweeper.h"
 
-void revealConnectedCells(Board *board, int x, int y)
+void safeScore(char *name, int score)
+{
+    FILE *file = fopen("leaderboard.txt", "a");
+    if (file == NULL)
+    {
+        printf("Error opening file!\n");
+        exit(1);
+    }
+    fprintf(file, "%s %d\n", name, score);
+    fclose(file);
+}
+
+void getTopFiveScores()
+{
+    FILE *file = fopen("leaderboard.txt", "r");
+    if (file == NULL)
+    {
+        printf("Error opening file!\n");
+        exit(1);
+    }
+
+    char name[100];
+    int score;
+    int scores[5] = {0};
+    char names[5][100];
+
+    while (fscanf(file, "%s %d", name, &score) != EOF)
+    {
+        for (int i = 0; i < 5; i++)
+        {
+            if (score > scores[i])
+            {
+                for (int j = 4; j > i; j--)
+                {
+                    scores[j] = scores[j - 1];
+                    strcpy(names[j], names[j - 1]);
+                }
+                scores[i] = score;
+                strcpy(names[i], name);
+                break;
+            }
+        }
+    }
+
+    printf("\nTop 5 Scores:\n");
+    for (int i = 0; i < 5; i++)
+    {
+        printf("%d. %s: %d\n", i + 1, names[i], scores[i]);
+    }
+
+    fclose(file);
+}
+
+void revealConnectedCells(Board *board, int x, int y, int *uncoveredCells)
 {
     if (x < 0 || x >= board->rows || y < 0 || y >= board->cols)
         return;
@@ -13,20 +67,21 @@ void revealConnectedCells(Board *board, int x, int y)
 
     if (board->grid[x][y] == '0')
     { // If no bombs around, recursively reveal neighbors
+        (*uncoveredCells)++;
         for (int dx = -1; dx <= 1; dx++)
         {
             for (int dy = -1; dy <= 1; dy++)
             {
                 if (dx != 0 || dy != 0)
                 { // Avoid revealing the current cell again
-                    revealConnectedCells(board, x + dx, y + dy);
+                    revealConnectedCells(board, x + dx, y + dy, uncoveredCells);
                 }
             }
         }
     }
 }
 
-void playGame(Board *board)
+void playGame(Board *board, char *name)
 {
     int x, y;
     char action;
@@ -40,7 +95,7 @@ void playGame(Board *board)
         printBoard(board, 0);
         printf("Attempts: %d | Score: %d\n\n", attempts, uncoveredCells * multiplier);
 
-        printf("Enter your move (f x y to flag, r x y to reveal): ");
+        printf("\nEnter your move (f x y to flag, r x y to reveal): ");
         scanf(" %c %d %d", &action, &x, &y);
 
         if (x < 0 || x >= board->rows || y < 0 || y >= board->cols)
@@ -50,6 +105,8 @@ void playGame(Board *board)
         }
 
         attempts++;
+        x--;
+        y--;
 
         if (action == 'f')
         { // Place or remove flag
@@ -78,16 +135,18 @@ void playGame(Board *board)
 
             if (board->grid[x][y] == '*')
             {
-                printf("Game Over! You hit a mine at (%d, %d).\n", x, y);
+                printf("Game Over! You hit a mine at (%d, %d).\n", x + 1, y + 1);
                 printBoard(board, 1);
                 printf("Final Score: %d\n", uncoveredCells * multiplier);
+                safeScore(name, uncoveredCells * multiplier);
+                getTopFiveScores();
                 break;
             }
 
             if (board->visible[x][y] == '.')
             {
-                revealConnectedCells(board, x, y); // Reveal connected cells
-                uncoveredCells++;                  // Increment uncovered cells counter
+                revealConnectedCells(board, x, y, &uncoveredCells); // Reveal connected cells
+                uncoveredCells++;                                   // Increment uncovered cells counter
             }
 
             // Check win condition
@@ -107,6 +166,8 @@ void playGame(Board *board)
                 printf("Congratulations! You've cleared the board.\n");
                 printBoard(board, 1);
                 printf("Final Score: %d\n", uncoveredCells * multiplier);
+                safeScore(name, uncoveredCells * multiplier);
+                getTopFiveScores();
                 break;
             }
         }

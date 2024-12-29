@@ -13,8 +13,9 @@
 #define HARD_COLS 30
 #define HARD_MINES 99
 
-typedef struct {
-    char **grid; // 2D array for the board
+typedef struct
+{
+    char **grid;    // 2D array for the board
     char **visible; // 2D array for visible cells
     int rows;
     int cols;
@@ -25,6 +26,6 @@ void initBoard(Board *board, int rows, int cols, int mines);
 void placeMines(Board *board);
 void printBoard(Board *board, int revealMines);
 void freeBoard(Board *board);
-void playGame(Board *board);
+void playGame(Board *board, char *name);
 
 #endif

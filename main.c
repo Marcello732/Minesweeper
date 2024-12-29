@@ -4,10 +4,13 @@
 int main()
 {
     int choice;
+    char name[100];
     Board board;
 
     printf("Welcome to Minesweeper!\n");
-    printf("Select difficulty level:\n");
+    printf("Your name: ");
+    scanf("%s", name);
+    printf("\nSelect difficulty level:\n");
     printf("1. Easy (9x9, 10 mines)\n");
     printf("2. Medium (16x16, 40 mines)\n");
     printf("3. Hard (16x30, 99 mines)\n");
@@ -30,7 +33,7 @@ int main()
         return 1;
     }
 
-    playGame(&board);
+    playGame(&board, name);
     freeBoard(&board);
     return 0;
 }
