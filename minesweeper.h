@@ -27,5 +27,9 @@ void placeMines(Board *board, int safeX, int safeY);
 void printBoard(Board *board, int revealMines);
 void freeBoard(Board *board);
 void playGame(Board *board, char *name);
-
+void revealConnectedCells(Board *board, int x, int y, int *uncoveredCells);
+void saveScore(char *name, int score, char *level);
+void getTopFiveScores();
+int loadBoardFromFile(Board *board, const char *filename);
+int runFileMode(const char *boardFile, const char *movesFile);
 #endif

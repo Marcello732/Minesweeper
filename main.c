@@ -1,7 +1,9 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include "minesweeper.h"
 
-int main()
+int playInteractiveGame()
 {
     int choice;
     char name[100];
@@ -42,5 +44,26 @@ int main()
 
     playGame(&board, name);
     freeBoard(&board);
+
+    return 0;
+}
+
+int main(int argc, char **argv)
+{
+    if (argc > 1 && strcmp(argv[1], "--file-mode") == 0)
+    {
+        if (argc < 4)
+        {
+            printf("Usage: %s --file-mode <board_file> <moves_file>\n", argv[0]);
+            return 1;
+        }
+
+        const char *boardFile = argv[2];
+        const char *movesFile = argv[3];
+        return runFileMode(boardFile, movesFile);
+    }
+
+    // Default interactive game mode
+    playInteractiveGame();
     return 0;
 }
