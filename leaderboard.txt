@@ -7,3 +7,7 @@ Test 2 Easy
 Test3 0 Medium
 Test4 34 Medium
 Test6 27 Easy
+Zosaiii 0 Easy
+Test7 37 Easy
+tets 285 Hard
+teststetst 130 Custom

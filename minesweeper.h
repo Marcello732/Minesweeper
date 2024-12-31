@@ -23,7 +23,7 @@ typedef struct
 } Board;
 
 void initBoard(Board *board, int rows, int cols, int mines);
-void placeMines(Board *board);
+void placeMines(Board *board, int safeX, int safeY);
 void printBoard(Board *board, int revealMines);
 void freeBoard(Board *board);
 void playGame(Board *board, char *name);

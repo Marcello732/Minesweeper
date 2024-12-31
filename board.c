@@ -22,21 +22,21 @@ void initBoard(Board *board, int rows, int cols, int mines)
         }
     }
 
-    placeMines(board);
+    // placeMines(board);s
 }
 
-void placeMines(Board *board)
+void placeMines(Board *board, int safeX, int safeY)
 {
     srand(time(NULL));
     int placed = 0;
 
-    // Place mines
     while (placed < board->mines)
     {
         int r = rand() % board->rows;
         int c = rand() % board->cols;
 
-        if (board->grid[r][c] != '*')
+        // Ensure mines are not placed on or around the first move
+        if (board->grid[r][c] != '*' && !(r >= safeX - 1 && r <= safeX + 1 && c >= safeY - 1 && c <= safeY + 1))
         {
             board->grid[r][c] = '*';
             placed++;
@@ -59,6 +59,7 @@ void placeMines(Board *board)
 
 void printBoard(Board *board, int revealMines)
 {
+    printf("\n");
     printf("  | "); // Top border numbering
     for (int j = 0; j < board->cols; j++)
     {

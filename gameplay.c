@@ -92,19 +92,23 @@ void playGame(Board *board, char *name)
     int attempts = 0;
     int uncoveredCells = 0;
     int multiplier = (board->rows == EASY_ROWS) ? 1 : (board->rows == MEDIUM_ROWS) ? 2
-                                                                                   : 3;
+                                                  : (board->rows == HARD_ROWS)     ? 3
+                                                                                   : 2;
     char *level = (board->rows == EASY_ROWS) ? "Easy" : (board->rows == MEDIUM_ROWS) ? "Medium"
-                                                                                     : "Hard";
+                                                    : (board->rows == HARD_ROWS)     ? "Hard"
+                                                                                     : "Custom";
+
+    int isFirstMove = 1;
 
     while (1)
     {
         printBoard(board, 0);
-        printf("Attempts: %d | Score: %d\n\n", attempts, uncoveredCells * multiplier);
+        printf("Attempts: %d | Score: %d\n", attempts, uncoveredCells * multiplier);
 
-        printf("\nEnter your move (f x y to flag, r x y to reveal): ");
+        printf("\nEnter your move (f x y to flag, r x y to reveal):");
         scanf(" %c %d %d", &action, &x, &y);
 
-        if (x < 0 || x >= board->rows || y < 0 || y >= board->cols)
+        if (x < 0 || x > board->rows || y < 0 || y > board->cols)
         {
             printf("Invalid coordinates! Try again.\n");
             continue;
@@ -137,6 +141,12 @@ void playGame(Board *board, char *name)
             {
                 printf("Cannot reveal a flagged cell! Remove the flag first.\n");
                 continue;
+            }
+
+            if (isFirstMove)
+            {
+                placeMines(board, x, y); // Place mines after the first move
+                isFirstMove = 0;
             }
 
             if (board->grid[x][y] == '*')
