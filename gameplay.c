@@ -85,7 +85,18 @@ void revealConnectedCells(Board *board, int x, int y, int *uncoveredCells)
     }
 }
 
-void playGame(Board *board, char *name)
+void endGame(Board *board, int uncoveredCells, int multiplier, char *level)
+{
+    char name[100];
+    printBoard(board, 1);
+    printf("Final Score: %d\n", uncoveredCells * multiplier);
+    printf("Your name: ");
+    scanf("%s", name);
+    saveScore(name, uncoveredCells * multiplier, level);
+    getTopFiveScores();
+}
+
+void playGame(Board *board)
 {
     int x, y;
     char action;
@@ -97,7 +108,6 @@ void playGame(Board *board, char *name)
     char *level = (board->rows == EASY_ROWS) ? "Easy" : (board->rows == MEDIUM_ROWS) ? "Medium"
                                                     : (board->rows == HARD_ROWS)     ? "Hard"
                                                                                      : "Custom";
-
     int isFirstMove = 1;
 
     while (1)
@@ -152,10 +162,7 @@ void playGame(Board *board, char *name)
             if (board->grid[x][y] == '*')
             {
                 printf("Game Over! You hit a mine at (%d, %d).\n", x + 1, y + 1);
-                printBoard(board, 1);
-                printf("Final Score: %d\n", uncoveredCells * multiplier);
-                saveScore(name, uncoveredCells * multiplier, level);
-                getTopFiveScores();
+                endGame(board, uncoveredCells, multiplier, level);
                 break;
             }
 
@@ -180,10 +187,7 @@ void playGame(Board *board, char *name)
             if (hiddenCells == board->mines)
             {
                 printf("Congratulations! You've cleared the board.\n");
-                printBoard(board, 1);
-                printf("Final Score: %d\n", uncoveredCells * multiplier);
-                saveScore(name, uncoveredCells * multiplier, level);
-                getTopFiveScores();
+                endGame(board, uncoveredCells, multiplier, level);
                 break;
             }
         }

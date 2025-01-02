@@ -6,13 +6,10 @@
 int playInteractiveGame()
 {
     int choice;
-    char name[100];
     Board board;
     int rows, cols, mines;
 
     printf("Welcome to Minesweeper!\n");
-    printf("Your name: ");
-    scanf("%s", name);
     printf("\nSelect difficulty level:\n");
     printf("1. Easy (9x9, 10 mines)\n");
     printf("2. Medium (16x16, 40 mines)\n");
@@ -42,7 +39,7 @@ int playInteractiveGame()
         return 1;
     }
 
-    playGame(&board, name);
+    playGame(&board);
     freeBoard(&board);
 
     return 0;
@@ -63,7 +60,6 @@ int main(int argc, char **argv)
         return runFileMode(boardFile, movesFile);
     }
 
-    // Default interactive game mode
     playInteractiveGame();
     return 0;
 }
