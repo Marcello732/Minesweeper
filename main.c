@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 #include "minesweeper.h"
 
 int playInteractiveGame()
@@ -47,17 +48,58 @@ int playInteractiveGame()
 
 int main(int argc, char **argv)
 {
-    if (argc > 1 && strcmp(argv[1], "-f") == 0)
+    int opt;
+    char *boardFile = NULL;
+    char *movesFile = NULL;
+    int fileMode = 0;
+
+    while ((opt = getopt(argc, argv, "fb:m:h")) != -1)
     {
-        if (argc < 4)
+        switch (opt)
         {
-            printf("Usage: %s -f <board_file> <moves_file>\n", argv[0]);
+        case 'f': // Enable file mode
+            fileMode = 1;
+            break;
+        case 'b': // Board file
+            boardFile = optarg;
+            break;
+        case 'm': // Moves file
+            movesFile = optarg;
+            break;
+        case 'h': // Help
+            printf("Usage: %s [-f] [-b board_file] [-m moves_file]\n", argv[0]);
+            printf("Options:\n");
+            printf("  -f               Enable file mode\n");
+            printf("  -b board_file    Specify board file\n");
+            printf("  -m moves_file    Specify moves file\n");
+            printf("  -h               Show this help message\n");
+            return 0;
+        default: // Unknown option
+            fprintf(stderr, "Usage: %s [-f] [-b board_file] [-m moves_file]\n", argv[0]);
             return 1;
         }
+    }
 
-        const char *boardFile = argv[2];
-        const char *movesFile = argv[3];
-        return runFileMode(boardFile, movesFile);
+    if (argc > 1 && strcmp(argv[1], "-f") == 0)
+    {
+        // if (argc < 4)
+        // {
+        //     printf("Usage: %s -f <board_file> <moves_file>\n", argv[0]);
+        //     return 1;
+        // }
+
+        // const char *boardFile = argv[2];
+        // const char *movesFile = argv[3];
+        // return runFileMode(boardFile, movesFile);
+        if (fileMode)
+        {
+            if (!boardFile || !movesFile)
+            {
+                fprintf(stderr, "Error: Both board and moves files are required in file mode.\n");
+                return 1;
+            }
+            return runFileMode(boardFile, movesFile);
+        }
     }
 
     playInteractiveGame();
