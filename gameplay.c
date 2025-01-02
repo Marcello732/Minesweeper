@@ -115,7 +115,7 @@ void playGame(Board *board)
         printBoard(board, 0);
         printf("Attempts: %d | Score: %d\n", attempts, uncoveredCells * multiplier);
 
-        printf("\nEnter your move (f x y to flag, r x y to reveal):");
+        printf("\nEnter your move (f x y to flag, r x y to reveal): ");
         scanf(" %c %d %d", &action, &x, &y);
 
         if (x < 1 || x > board->rows || y < 1 || y > board->cols)

@@ -15,8 +15,8 @@
 
 typedef struct
 {
-    char **grid;    // 2D array for the board
-    char **visible; // 2D array for visible cells
+    char **grid;     // 2D array for the board
+    short **visible; // 2D array for visible cells
     int rows;
     int cols;
     int mines;

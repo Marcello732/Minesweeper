@@ -60,40 +60,66 @@ void placeMines(Board *board, int safeX, int safeY)
 void printBoard(Board *board, int revealMines)
 {
     printf("\n");
-    printf("  | "); // Top border numbering
+    printf("   | "); // Top border numbering
     for (int j = 0; j < board->cols; j++)
     {
         printf("%d ", j + 1);
     }
     printf("\n");
-    printf("--");
+    printf("---");
     printf("|");
     for (int j = 0; j < board->cols; j++)
     {
-        printf("--");
+        if (j < 9)
+        {
+            printf("--");
+        }
+        else
+        {
+            printf("---");
+        }
     }
     printf("\n");
 
     for (int i = 0; i < board->rows; i++)
     {
+        if (i < 9)
+            printf(" ");
         printf("%d | ", i + 1); // Row numbering
         for (int j = 0; j < board->cols; j++)
         {
             if (revealMines)
             {
-                printf("%c ", board->grid[i][j]);
+                if (j < 9)
+                    printf("%c ", board->grid[i][j]); // Display number or mine
+                else
+                    printf(" %c ", board->grid[i][j]); // Display number or mine
             }
             else if (board->visible[i][j] == 'f')
             {
-                printf("F "); // Display flag
+                if (j < 9)
+                    printf("F "); // Display flag
+                else
+                    printf(" F "); // Display flag
             }
             else if (board->visible[i][j] == '1')
             {
-                printf("%c ", board->grid[i][j]); // Display number or mine
+                if (j < 9)
+                    if (board->grid[i][j] == '0')
+                        printf("  "); // Display empty cell
+                    else
+                        printf("%c ", board->grid[i][j]); // Display number or mine
+                else if (board->grid[i][j] == '0')
+                    printf("   "); // Display empty cell
+                else
+                    printf(" %c ", board->grid[i][j]); // Display number or mine
             }
             else
             {
-                printf(". ");
+                if (j < 9)
+                    printf("██");
+                else
+                    printf("███");
             }
         }
         printf("\n");
