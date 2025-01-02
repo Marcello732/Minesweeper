@@ -47,11 +47,11 @@ int playInteractiveGame()
 
 int main(int argc, char **argv)
 {
-    if (argc > 1 && strcmp(argv[1], "--file-mode") == 0)
+    if (argc > 1 && strcmp(argv[1], "-f") == 0)
     {
         if (argc < 4)
         {
-            printf("Usage: %s --file-mode <board_file> <moves_file>\n", argv[0]);
+            printf("Usage: %s -f <board_file> <moves_file>\n", argv[0]);
             return 1;
         }
 
