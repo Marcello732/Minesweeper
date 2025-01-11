@@ -82,15 +82,6 @@ int main(int argc, char **argv)
 
     if (argc > 1 && strcmp(argv[1], "-f") == 0)
     {
-        // if (argc < 4)
-        // {
-        //     printf("Usage: %s -f <board_file> <moves_file>\n", argv[0]);
-        //     return 1;
-        // }
-
-        // const char *boardFile = argv[2];
-        // const char *movesFile = argv[3];
-        // return runFileMode(boardFile, movesFile);
         if (fileMode)
         {
             if (!boardFile || !movesFile)

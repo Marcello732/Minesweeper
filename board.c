@@ -17,12 +17,10 @@ void initBoard(Board *board, int rows, int cols, int mines)
         board->visible[i] = malloc(cols * sizeof(char));
         for (int j = 0; j < cols; j++)
         {
-            board->grid[i][j] = '0';    // Initialize to 0
-            board->visible[i][j] = '.'; // Hidden state
+            board->grid[i][j] = '0';    // Empty cells
+            board->visible[i][j] = '.'; // Hidden cells
         }
     }
-
-    // placeMines(board);s
 }
 
 void placeMines(Board *board, int safeX, int safeY)
