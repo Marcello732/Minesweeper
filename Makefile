@@ -1,4 +1,4 @@
-main: build
+main: build run_tests
 	./minesweeper
 
 build: main.c board.c gameplay.c file_mode.c

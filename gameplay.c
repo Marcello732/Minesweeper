@@ -8,7 +8,7 @@ void saveScore(char *name, int score, char *level)
     FILE *file = fopen("leaderboard.txt", "a");
     if (file == NULL)
     {
-        printf("Error opening file!\n");
+        printf("[!] Błąd otwierania pliku!\n");
         exit(1);
     }
     fprintf(file, "%s %d %s\n", name, score, level);
@@ -20,7 +20,7 @@ void getTopFiveScores()
     FILE *file = fopen("leaderboard.txt", "r");
     if (file == NULL)
     {
-        printf("Error opening file!\n");
+        printf("[!] Błąd otwierania pliku!\n");
         exit(1);
     }
 
@@ -51,7 +51,7 @@ void getTopFiveScores()
         }
     }
 
-    printf("\nTop 5 Scores:\n");
+    printf("\nTop 5 wynikow:\n");
     for (int i = 0; i < 5; i++)
     {
         printf("%d. %s: %d %s\n", i + 1, names[i], scores[i], levels[i]);
@@ -89,8 +89,8 @@ void endGame(Board *board, int uncoveredCells, int multiplier, char *level)
 {
     char name[100];
     printBoard(board, 1);
-    printf("Final Score: %d\n", uncoveredCells * multiplier);
-    printf("Your name: ");
+    printf("Wynik: %d\n", uncoveredCells * multiplier);
+    printf("Twoje imie: ");
     scanf("%s", name);
     saveScore(name, uncoveredCells * multiplier, level);
     getTopFiveScores();
@@ -113,14 +113,15 @@ void playGame(Board *board)
     while (1)
     {
         printBoard(board, 0);
-        printf("Attempts: %d | Score: %d\n", attempts, uncoveredCells * multiplier);
+        printf("Ruchy: %d | Wynik: %d\n", attempts, uncoveredCells * multiplier);
 
-        printf("\nEnter your move (f x y to flag, r x y to reveal): ");
+        printf("\nPodaj ruch (f x y, aby oznaczyc flage, r x y, aby odkryc): ");
         scanf(" %c %d %d", &action, &x, &y);
 
         if (x < 1 || x > board->rows || y < 1 || y > board->cols)
         {
-            printf("Invalid coordinates! Try again.\n");
+
+            printf("Niepoprawne wspolrzedne! Sprobuj ponownie.\n");
             continue;
         }
 
@@ -133,23 +134,26 @@ void playGame(Board *board)
             if (board->visible[x][y] == 'f')
             {
                 board->visible[x][y] = '.'; // Remove flag
-                printf("Flag removed from (%d, %d)\n\n", x, y);
+
+                printf("Flaga usunieta z (%d, %d)\n\n", x, y);
             }
             else if (board->visible[x][y] == '.')
             {
                 board->visible[x][y] = 'f'; // Place flag
-                printf("Flag placed on (%d, %d)\n\n", x, y);
+
+                printf("Flaga umieszczona na (%d, %d)\n\n", x, y);
             }
             else
             {
-                printf("Cell already uncovered! Cannot place flag.\n");
+
+                printf("Miejsce jest juz odkryte! Nie mozna umiescic flagi.\n");
             }
         }
         else if (action == 'r')
         { // Reveal cell
             if (board->visible[x][y] == 'f')
             {
-                printf("Cannot reveal a flagged cell! Remove the flag first.\n");
+                printf("Nie mozna odkryc oznaczonej flaga komorki! Najpierw usun flage.\n");
                 continue;
             }
 
@@ -161,7 +165,7 @@ void playGame(Board *board)
 
             if (board->grid[x][y] == '*')
             {
-                printf("Game Over! You hit a mine at (%d, %d).\n", x + 1, y + 1);
+                printf("Koniec gry! Trafiles na mine na (%d, %d).\n", x + 1, y + 1);
                 endGame(board, uncoveredCells, multiplier, level);
                 break;
             }
@@ -186,14 +190,14 @@ void playGame(Board *board)
             }
             if (hiddenCells == board->mines)
             {
-                printf("Congratulations! You've cleared the board.\n");
+                printf("Gratulacje! Odkryles wszystkie komorki.\n");
                 endGame(board, uncoveredCells, multiplier, level);
                 break;
             }
         }
         else
         {
-            printf("Invalid action! Use 'f' or 'r'.\n");
+            printf("Niepoprawny ruch! Uzyj 'f' lub 'r'.\n");
         }
     }
 }
