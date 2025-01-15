@@ -7,7 +7,7 @@ int loadBoardFromFile(Board *board, const char *filename)
     FILE *file = fopen(filename, "r");
     if (!file)
     {
-        printf("[!]: Nie mozna otworzyc pliku '%s'.\n", filename);
+        printf("[!] Cannot open board file '%s'.\n", filename);
         return 0;
     }
 
@@ -41,7 +41,7 @@ int runFileMode(const char *boardFile, const char *movesFile)
     FILE *file = fopen(movesFile, "r");
     if (!file)
     {
-        printf("[!]: Nie mozna otworzyc pliku '%s'.\n", movesFile);
+        printf("[!] Cannot open moves file '%s'.\n", movesFile);
         return 1;
     }
 
@@ -58,7 +58,7 @@ int runFileMode(const char *boardFile, const char *movesFile)
 
         if (x < 1 || x > board.rows || y < 1 || y > board.cols)
         {
-            printf("Niepoprawny ruch w pliku: (%c %d %d)\n", action, x, y);
+            printf("[!] Invalid move in file: (%c %d %d)\n", action, x, y);
             success = 0;
             break;
         }
@@ -99,7 +99,7 @@ int runFileMode(const char *boardFile, const char *movesFile)
         }
         else
         {
-            printf("Niepoprawna akcja w pliku: %c\n", action);
+            printf("[!] Invalid action in file: %c\n", action);
             success = 0;
             break;
         }
@@ -108,9 +108,9 @@ int runFileMode(const char *boardFile, const char *movesFile)
     fclose(file);
 
     // Display results
-    printf("Ilość poprawnych krokow: %d\n", correctSteps);
-    printf("Wynik: %d\n", uncoveredCells * multiplier);
-    printf("Rezultat gry: %d\n", success);
+    printf("Correct Steps: %d\n", correctSteps);
+    printf("Final Score: %d\n", uncoveredCells * multiplier);
+    printf("Game Result: %d\n", success);
 
     return 0;
 }

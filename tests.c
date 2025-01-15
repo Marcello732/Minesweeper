@@ -71,11 +71,11 @@ int main()
 
     if (failed == 0)
     {
-        printf("Wszystkie testy zaliczone!\n");
+        printf("All tests passed!\n");
     }
     else
     {
-        printf("%d testów nie zaliczonych.\n", failed);
+        printf("%d test(s) failed.\n", failed);
     }
 
     return failed;
