@@ -63,9 +63,13 @@ void getTopFiveScores()
 void revealConnectedCells(Board *board, int x, int y, int *uncoveredCells)
 {
     if (x < 0 || x >= board->rows || y < 0 || y >= board->cols)
+    {
         return;
+    }
     if (board->visible[x][y] == '1' || board->visible[x][y] == 'f')
+    {
         return;
+    }
 
     board->visible[x][y] = '1'; // Mark cell as revealed
 
@@ -157,6 +161,9 @@ void playGame(Board *board)
             {
                 placeMines(board, x, y); // Place mines after the first move
                 isFirstMove = 0;
+                revealConnectedCells(board, x, y, &uncoveredCells); // Reveal connected cells
+                uncoveredCells++;
+                continue;
             }
 
             if (board->grid[x][y] == '*')
